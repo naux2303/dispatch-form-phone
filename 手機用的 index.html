@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>派車簽認單（手機填寫版）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+
+    header {
+      text-align: center;
+      padding: 10px 12px 4px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    header small {
+      display: block;
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 6px 8px 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;      /* 手機寬度 */
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      padding: 12px 14px 16px;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      font-size: 16px;
+      margin: 0 0 10px;
+      border-left: 4px solid #333;
+      padding-left: 6px;
+    }
+
+    .field-group {
+      margin-bottom: 10px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .field-group input[type="text"],
+    .field-group input[type="tel"],
+    .field-group input[type="date"],
+    .field-group input[type="time"],
+    .field-group input[type="number"],
+    .field-group textarea,
+    .field-group select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px 8px;
+      font-size: 16px;         /* 手機好點 */
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .field-inline {
+      display: flex;
+      gap: 8px;
+    }
+    .field-inline > div {
+      flex: 1;
+    }
+
+    .pill-options {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .pill-options label {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #ccc;
+      font-size: 13px;
+      background: #fafafa;
+    }
+    .pill-options input {
+      margin-right: 4px;
+    }
+
+    .textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    button {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 15px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #333;
+      color: #fff;
+    }
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .copy-result {
+      margin-top: 10px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: #f0f0f0;
+      font-size: 12px;
+      color: #555;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+
+    /* 電腦版提醒：不建議用此頁，請改用正式 A5 簽單版 */
+    .desktop-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+      z-index: 9999;
+    }
+
+    .desktop-mask-inner {
+      max-width: 420px;
+      background: #222;
+      border-radius: 12px;
+      padding: 16px 18px 14px;
+    }
+    .desktop-mask h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .desktop-mask p {
+      margin: 4px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .desktop-mask button {
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  派車、簽認單（手機填寫版）
+  <small>建議用手機直式開啟；電腦列印請改用 A5 簽單版網站</small>
+</header>
+
+<div class="wrapper">
+  <div class="card">
+    <h2>基本資料</h2>
+
+    <div class="field-group">
+      <label for="company">公司名稱（抬頭）</label>
+      <input type="text" id="company" value="○○租賃有限公司" />
+    </div>
+
+    <div class="field-group">
+      <div class="field-inline">
+        <div>
+          <label for="passenger">乘客姓名</label>
+          <input type="text" id="passenger" placeholder="例：王小明" />
+        </div>
+        <div>
+          <label for="phone">乘客電話</label>
+          <input type="tel" id="phone" placeholder="例：0912-345-678" />
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-inline">
+        <div>
+          <label for="date">日期</label>
+          <input type="date" id="date" />
+        </div>
+        <div>
+          <label>派車類型</label>
+          <div class="pill-options">
+            <label><input type="radio" name="type" value="送機" checked>送機</label>
+            <label><input type="radio" name="type" value="接機">接機</label>
+            <label><input type="radio" name="type" value="包車">包車</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>行程資訊</h2>
+
+    <div class="field-group">
+      <label for="start">起點</label>
+      <input type="text" id="start" placeholder="縣市＋區＋路名＋門牌" />
+    </div>
+
+    <div class="field-group">
+      <label for="end">終點</label>
+      <input type="text" id="end" placeholder="縣市＋區＋路名＋門牌" />
+    </div>
+
+    <div class="field-group">
+      <div class="field-inline">
+        <div>
+          <label for="time-start">開始 / 班機時間（24H）</label>
+          <input type="time" id="time-start" inputmode="numeric" />
+        </div>
+        <div>
+          <label for="time-end">結束時間（24H）</label>
+          <input type="time" id="time-end" inputmode="numeric" />
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-inline">
+        <div>
+          <label>包車共計（小時 / 分鐘，可留空）</label>
+          <div class="field-inline">
+            <div>
+              <input type="number" id="hours" min="0" placeholder="時" />
+            </div>
+            <div>
+              <input type="number" id="minutes" min="0" placeholder="分" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <label>是否舉牌接機</label>
+          <div class="pill-options">
+            <label><input type="radio" name="board" value="否" checked>否</label>
+            <label><input type="radio" name="board" value="是">是</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>車輛 / 司機資訊</h2>
+
+    <div class="field-group">
+      <label>車型</label>
+      <div class="pill-options">
+        <label><input type="radio" name="car-type" value="轎車" checked>轎車</label>
+        <label><input type="radio" name="car-type" value="休旅車">休旅車</label>
+        <label><input type="radio" name="car-type" value="其他">其他</label>
+      </div>
+      <input type="text" id="car-type-other" placeholder="若選『其他』可在此補充，例如：九人座、賓士…" />
+    </div>
+
+    <div class="field-group">
+      <div class="field-inline">
+        <div>
+          <label for="people">人數</label>
+          <input type="number" id="people" min="1" placeholder="例：3" />
+        </div>
+        <div>
+          <label for="driver">駕駛姓名</label>
+          <input type="text" id="driver" placeholder="例：張司機" />
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="car-no">車號</label>
+      <input type="text" id="car-no" placeholder="例：ABC-1234" />
+    </div>
+
+    <h2>備註</h2>
+
+    <div class="field-group">
+      <label for="note">備註（可填延誤、空車單等）</label>
+      <textarea id="note" class="textarea" placeholder="例：因航班延誤一小時，改 09:30 接機"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn-secondary" id="btn-today">日期填今天</button>
+      <button type="button" class="btn-secondary" id="btn-clear">清除全部</button>
+      <button type="button" class="btn-primary" id="btn-copy">複製派車內容</button>
+    </div>
+
+    <div id="copy-result" class="copy-result" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- 電腦版遮罩：提醒這頁是給手機用的 -->
+<div class="desktop-mask" id="desktop-mask">
+  <div class="desktop-mask-inner">
+    <h3>這一頁主要是給手機使用喔</h3>
+    <p>電腦列印 A5 簽單，請使用你原本的網站：</p>
+    <p><code>https://naux2303.github.io/Car-Dispatch-Form/</code></p>
+    <p>如果只是想在電腦測試填表，可以點下面按鈕繼續。</p>
+    <button class="btn-primary" id="btn-desktop-continue">我知道了，仍要使用此頁</button>
+  </div>
+</div>
+
+<script>
+  // 1. 預設日期為今天（含今年，不用自己打年份）
+  function setDefaultDateIfEmpty() {
+    const el = document.getElementById("date");
+    if (!el.value) {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      el.value = `${y}-${m}-${day}`;
+    }
+  }
+
+  // 2. 產生派車內容文字，方便貼到 LINE
+  function buildSummary() {
+    const company = document.getElementById("company").value.trim();
+    const passenger = document.getElementById("passenger").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const date = document.getElementById("date").value;
+    const start = document.getElementById("start").value.trim();
+    const end = document.getElementById("end").value.trim();
+    const timeStart = document.getElementById("time-start").value;
+    const timeEnd = document.getElementById("time-end").value;
+    const hours = document.getElementById("hours").value.trim();
+    const minutes = document.getElementById("minutes").value.trim();
+    const board = (document.querySelector("input[name='board']:checked") || {}).value || "";
+    const carType = (document.querySelector("input[name='car-type']:checked") || {}).value || "";
+    const carTypeOther = document.getElementById("car-type-other").value.trim();
+    const people = document.getElementById("people").value.trim();
+    const driver = document.getElementById("driver").value.trim();
+    const carNo = document.getElementById("car-no").value.trim();
+    const note = document.getElementById("note").value.trim();
+    const type = (document.querySelector("input[name='type']:checked") || {}).value || "";
+
+    let carTypeText = carType;
+    if (carType === "其他" && carTypeOther) {
+      carTypeText += `（${carTypeOther}）`;
+    }
+
+    let charterText = "";
+    if (hours || minutes) {
+      charterText = `${hours || "0"} 小時 ${minutes || "0"} 分`;
+    }
+
+    // 把 yyyy-mm-dd 拆成年月日（只顯示月日）
+    let dateText = "";
+    if (date) {
+      const d = new Date(date);
+      const m = d.getMonth() + 1;
+      const day = d.getDate();
+      dateText = `${m} 月 ${day} 日`;
+    }
+
+    let lines = [];
+    if (company) lines.push(`公司：${company}`);
+    if (dateText || type) lines.push(`日期：${dateText}　派車類型：${type}`);
+    if (passenger || phone) lines.push(`乘客：${passenger}　電話：${phone}`);
+    if (start) lines.push(`起點：${start}`);
+    if (end)   lines.push(`終點：${end}`);
+    if (timeStart) lines.push(`開始 / 班機時間：${timeStart}`);
+    if (timeEnd)   lines.push(`結束時間：${timeEnd}`);
+    if (charterText) lines.push(`包車共計：${charterText}`);
+    if (board) lines.push(`舉牌接機：${board}`);
+    if (carTypeText || people) lines.push(`車型：${carTypeText}　人數：${people || ""}`);
+    if (driver || carNo) lines.push(`駕駛：${driver}　車號：${carNo}`);
+    if (note) lines.push(`備註：${note}`);
+
+    return lines.join("\n");
+  }
+
+  // 3. 清除表單
+  function clearForm() {
+    document.querySelectorAll("input, textarea").forEach(el => {
+      if (el.type === "radio") return;
+      if (el.id === "company") return; // 公司抬頭常用就保留
+      el.value = "";
+    });
+    // 單選選回預設
+    const typeDefault = document.querySelector("input[name='type'][value='送機']");
+    if (typeDefault) typeDefault.checked = true;
+    const boardDefault = document.querySelector("input[name='board'][value='否']");
+    if (boardDefault) boardDefault.checked = true;
+    const carTypeDefault = document.querySelector("input[name='car-type'][value='轎車']");
+    if (carTypeDefault) carTypeDefault.checked = true;
+    setDefaultDateIfEmpty();
+  }
+
+  // 4. Desktop 遮罩：螢幕太寬就跳提醒
+  function handleDesktopMask() {
+    const mask = document.getElementById("desktop-mask");
+    if (!mask) return;
+    const isDesktop = window.innerWidth > 900;
+    if (isDesktop) {
+      mask.style.display = "flex";
+    } else {
+      mask.style.display = "none";
+    }
+  }
+
+  window.addEventListener("load", () => {
+    setDefaultDateIfEmpty();
+    handleDesktopMask();
+  });
+
+  window.addEventListener("resize", handleDesktopMask);
+
+  document.getElementById("btn-today").addEventListener("click", () => {
+    setDefaultDateIfEmpty();
+  });
+
+  document.getElementById("btn-clear").addEventListener("click", () => {
+    clearForm();
+    const result = document.getElementById("copy-result");
+    result.style.display = "none";
+    result.textContent = "";
+  });
+
+  document.getElementById("btn-copy").addEventListener("click", async () => {
+    const text = buildSummary();
+    const result = document.getElementById("copy-result");
+    if (!text) {
+      result.style.display = "block";
+      result.textContent = "目前沒有內容可以複製，請先填寫表單。";
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+      result.style.display = "block";
+      result.textContent = "已複製派車內容，可直接貼到 LINE 或其他聊天視窗：\n\n" + text;
+    } catch (e) {
+      result.style.display = "block";
+      result.textContent = "複製失敗，但以下是產生的派車內容，你可以自行長按全選複製：\n\n" + text;
+    }
+  });
+
+  // 桌機遮罩按鈕：我知道了，仍要使用
+  document.getElementById("btn-desktop-continue").addEventListener("click", () => {
+    const mask = document.getElementById("desktop-mask");
+    if (mask) mask.style.display = "none";
+  });
+</script>
+</body>
+</html>
