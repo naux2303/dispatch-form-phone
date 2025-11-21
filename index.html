@@ -2,20 +2,22 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>派車簽認單（手機填寫版）</title>
+  <title>派車簽認單（手機填寫 + 產生A5圖檔）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     body {
-      font-family: "Microsoft JhengHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "Microsoft JhengHei", system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
       background: #f5f5f5;
+      font-size: 16px;
     }
 
     header {
       text-align: center;
       padding: 10px 12px 4px;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
     }
 
@@ -34,29 +36,29 @@
 
     .card {
       width: 100%;
-      max-width: 480px;      /* 手機寬度 */
+      max-width: 520px; /* 手機＋小平板 */
       background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      padding: 12px 14px 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      padding: 14px 14px 18px;
       box-sizing: border-box;
     }
 
     h2 {
-      font-size: 16px;
-      margin: 0 0 10px;
+      font-size: 18px;
+      margin: 10px 0 10px;
       border-left: 4px solid #333;
-      padding-left: 6px;
+      padding-left: 8px;
     }
 
     .field-group {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .field-group label {
       display: block;
-      font-size: 13px;
-      margin-bottom: 3px;
+      font-size: 15px;
+      margin-bottom: 4px;
     }
 
     .field-group input[type="text"],
@@ -68,32 +70,32 @@
     .field-group select {
       width: 100%;
       box-sizing: border-box;
-      padding: 6px 8px;
-      font-size: 16px;         /* 手機好點 */
-      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 17px;
+      border-radius: 8px;
       border: 1px solid #ccc;
     }
 
     .field-inline {
-      display: flex;
-      gap: 8px;
+      display: block; /* 全部改直向排列 */
     }
     .field-inline > div {
-      flex: 1;
+      width: 100%;
+      margin-bottom: 8px;
     }
 
     .pill-options {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .pill-options label {
       display: inline-flex;
       align-items: center;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 999px;
       border: 1px solid #ccc;
-      font-size: 13px;
+      font-size: 14px;
       background: #fafafa;
     }
     .pill-options input {
@@ -101,7 +103,7 @@
     }
 
     .textarea {
-      min-height: 60px;
+      min-height: 70px;
       resize: vertical;
     }
 
@@ -109,12 +111,12 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     button {
       flex: 1;
-      padding: 8px 10px;
+      padding: 9px 10px;
       font-size: 15px;
       border-radius: 999px;
       border: none;
@@ -133,19 +135,36 @@
     .copy-result {
       margin-top: 10px;
       padding: 6px 8px;
-      border-radius: 6px;
+      border-radius: 8px;
       background: #f0f0f0;
-      font-size: 12px;
+      font-size: 13px;
       color: #555;
       word-break: break-all;
       white-space: pre-wrap;
     }
 
-    /* 電腦版提醒：不建議用此頁，請改用正式 A5 簽單版 */
+    #img-preview {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px;
+    }
+    #img-preview img {
+      width: 100%;
+      max-width: 520px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #img-preview a {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    /* 電腦版提醒：這頁只適合手機填表 */
     .desktop-mask {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.6);
       color: #fff;
       display: none;
       align-items: center;
@@ -180,297 +199,626 @@
 </head>
 
 <body>
-<header>
-  派車、簽認單（手機填寫版）
-  <small>建議用手機直式開啟；電腦列印請改用 A5 簽單版網站</small>
-</header>
+  <header>
+    派車、簽認單（手機填寫）
+    <small>建議用手機直式開啟；A5 列印請用桌機版簽單網站</small>
+  </header>
 
-<div class="wrapper">
-  <div class="card">
-    <h2>基本資料</h2>
+  <div class="wrapper">
+    <div class="card">
+      <h2>基本資料</h2>
 
-    <div class="field-group">
-      <label for="company">公司名稱（抬頭）</label>
-      <input type="text" id="company" value="○○租賃有限公司" />
-    </div>
+      <div class="field-group">
+        <label for="company">公司名稱（抬頭）</label>
+        <input type="text" id="company" value="○○租賃有限公司" />
+      </div>
 
-    <div class="field-group">
-      <div class="field-inline">
-        <div>
-          <label for="passenger">乘客姓名</label>
-          <input type="text" id="passenger" placeholder="例：王小明" />
-        </div>
-        <div>
-          <label for="phone">乘客電話</label>
-          <input type="tel" id="phone" placeholder="例：0912-345-678" />
+      <div class="field-group">
+        <label for="passenger">乘客姓名</label>
+        <input type="text" id="passenger" placeholder="例：王小明" />
+      </div>
+
+      <div class="field-group">
+        <label for="phone">乘客電話</label>
+        <input type="tel" id="phone" placeholder="例：0912-345-678" />
+      </div>
+
+      <div class="field-group">
+        <label for="date">日期</label>
+        <input type="date" id="date" />
+      </div>
+
+      <div class="field-group">
+        <label>派車類型</label>
+        <div class="pill-options">
+          <label><input type="radio" name="type" value="送機" checked />送機</label>
+          <label><input type="radio" name="type" value="接機" />接機</label>
+          <label><input type="radio" name="type" value="包車" />包車</label>
         </div>
       </div>
-    </div>
 
-    <div class="field-group">
-      <div class="field-inline">
-        <div>
-          <label for="date">日期</label>
-          <input type="date" id="date" />
-        </div>
-        <div>
-          <label>派車類型</label>
-          <div class="pill-options">
-            <label><input type="radio" name="type" value="送機" checked>送機</label>
-            <label><input type="radio" name="type" value="接機">接機</label>
-            <label><input type="radio" name="type" value="包車">包車</label>
+      <h2>行程資訊</h2>
+
+      <div class="field-group">
+        <label for="start">起點</label>
+        <input type="text" id="start" placeholder="縣市＋區＋路名＋門牌" />
+      </div>
+
+      <div class="field-group">
+        <label for="end">終點</label>
+        <input type="text" id="end" placeholder="縣市＋區＋路名＋門牌" />
+      </div>
+
+      <div class="field-group">
+        <label for="time-start">開始 / 班機時間（24H）</label>
+        <input type="time" id="time-start" inputmode="numeric" />
+      </div>
+
+      <div class="field-group">
+        <label>包車共計（小時 / 分鐘，可留空）</label>
+        <div class="field-inline">
+          <div>
+            <input type="number" id="hours" min="0" placeholder="時" />
+          </div>
+          <div>
+            <input type="number" id="minutes" min="0" placeholder="分" />
           </div>
         </div>
       </div>
-    </div>
 
-    <h2>行程資訊</h2>
-
-    <div class="field-group">
-      <label for="start">起點</label>
-      <input type="text" id="start" placeholder="縣市＋區＋路名＋門牌" />
-    </div>
-
-    <div class="field-group">
-      <label for="end">終點</label>
-      <input type="text" id="end" placeholder="縣市＋區＋路名＋門牌" />
-    </div>
-
-    <div class="field-group">
-      <div class="field-inline">
-        <div>
-          <label for="time-start">開始 / 班機時間（24H）</label>
-          <input type="time" id="time-start" inputmode="numeric" />
-        </div>
-        <div>
-          <label for="time-end">結束時間（24H）</label>
-          <input type="time" id="time-end" inputmode="numeric" />
+      <div class="field-group">
+        <label>是否舉牌接機</label>
+        <div class="pill-options">
+          <label><input type="radio" name="board" value="否" checked />否</label>
+          <label><input type="radio" name="board" value="是" />是</label>
         </div>
       </div>
-    </div>
 
-    <div class="field-group">
-      <div class="field-inline">
-        <div>
-          <label>包車共計（小時 / 分鐘，可留空）</label>
-          <div class="field-inline">
-            <div>
-              <input type="number" id="hours" min="0" placeholder="時" />
-            </div>
-            <div>
-              <input type="number" id="minutes" min="0" placeholder="分" />
-            </div>
-          </div>
+      <h2>車輛 / 司機資訊</h2>
+
+      <div class="field-group">
+        <label>車型</label>
+        <div class="pill-options">
+          <label><input type="radio" name="car-type" value="轎車" checked />轎車</label>
+          <label><input type="radio" name="car-type" value="休旅車" />休旅車</label>
+          <label><input type="radio" name="car-type" value="其他" />其他</label>
         </div>
-        <div>
-          <label>是否舉牌接機</label>
-          <div class="pill-options">
-            <label><input type="radio" name="board" value="否" checked>否</label>
-            <label><input type="radio" name="board" value="是">是</label>
-          </div>
-        </div>
+        <input
+          type="text"
+          id="car-type-other"
+          placeholder="若選『其他』可在此補充，例如：九人座、賓士…"
+        />
       </div>
-    </div>
 
-    <h2>車輛 / 司機資訊</h2>
-
-    <div class="field-group">
-      <label>車型</label>
-      <div class="pill-options">
-        <label><input type="radio" name="car-type" value="轎車" checked>轎車</label>
-        <label><input type="radio" name="car-type" value="休旅車">休旅車</label>
-        <label><input type="radio" name="car-type" value="其他">其他</label>
+      <div class="field-group">
+        <label for="people">人數</label>
+        <input type="number" id="people" min="1" placeholder="例：3" />
       </div>
-      <input type="text" id="car-type-other" placeholder="若選『其他』可在此補充，例如：九人座、賓士…" />
-    </div>
 
-    <div class="field-group">
-      <div class="field-inline">
-        <div>
-          <label for="people">人數</label>
-          <input type="number" id="people" min="1" placeholder="例：3" />
-        </div>
-        <div>
-          <label for="driver">駕駛姓名</label>
-          <input type="text" id="driver" placeholder="例：張司機" />
-        </div>
+      <div class="field-group">
+        <label for="driver">駕駛姓名</label>
+        <input type="text" id="driver" placeholder="例：張司機" />
       </div>
+
+      <div class="field-group">
+        <label for="car-no">車號</label>
+        <input type="text" id="car-no" placeholder="例：ABC-1234" />
+      </div>
+
+      <h2>備註</h2>
+
+      <div class="field-group">
+        <label for="note">備註（可填延誤、空車單等）</label>
+        <textarea
+          id="note"
+          class="textarea"
+          placeholder="例：因航班延誤一小時，改 09:30 接機"
+        ></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-secondary" id="btn-today">
+          日期填今天
+        </button>
+        <button type="button" class="btn-secondary" id="btn-clear">
+          清除全部
+        </button>
+        <button type="button" class="btn-primary" id="btn-copy">
+          複製派車內容
+        </button>
+      </div>
+
+      <div class="btn-row" style="margin-top: 6px">
+        <button type="button" class="btn-secondary" id="btn-generate-img">
+          產生 A5 簽單圖檔（PNG）
+        </button>
+      </div>
+
+      <div id="copy-result" class="copy-result" style="display: none"></div>
+      <div id="img-preview"></div>
     </div>
-
-    <div class="field-group">
-      <label for="car-no">車號</label>
-      <input type="text" id="car-no" placeholder="例：ABC-1234" />
-    </div>
-
-    <h2>備註</h2>
-
-    <div class="field-group">
-      <label for="note">備註（可填延誤、空車單等）</label>
-      <textarea id="note" class="textarea" placeholder="例：因航班延誤一小時，改 09:30 接機"></textarea>
-    </div>
-
-    <div class="btn-row">
-      <button type="button" class="btn-secondary" id="btn-today">日期填今天</button>
-      <button type="button" class="btn-secondary" id="btn-clear">清除全部</button>
-      <button type="button" class="btn-primary" id="btn-copy">複製派車內容</button>
-    </div>
-
-    <div id="copy-result" class="copy-result" style="display:none;"></div>
   </div>
-</div>
 
-<!-- 電腦版遮罩：提醒這頁是給手機用的 -->
-<div class="desktop-mask" id="desktop-mask">
-  <div class="desktop-mask-inner">
-    <h3>這一頁主要是給手機使用喔</h3>
-    <p>電腦列印 A5 簽單，請使用你原本的網站：</p>
-    <p><code>https://naux2303.github.io/Car-Dispatch-Form/</code></p>
-    <p>如果只是想在電腦測試填表，可以點下面按鈕繼續。</p>
-    <button class="btn-primary" id="btn-desktop-continue">我知道了，仍要使用此頁</button>
+  <!-- 電腦版遮罩：提醒這頁是給手機用的 -->
+  <div class="desktop-mask" id="desktop-mask">
+    <div class="desktop-mask-inner">
+      <h3>這一頁主要是給手機使用喔</h3>
+      <p>電腦列印 A5 簽單，請使用你的桌機版網站：</p>
+      <p><code>https://naux2303.github.io/Car-Dispatch-Form/</code></p>
+      <p>如果只是想在電腦上測試填表，可以點下面按鈕繼續。</p>
+      <button class="btn-primary" id="btn-desktop-continue">
+        我知道了，仍要使用此頁
+      </button>
+    </div>
   </div>
-</div>
 
-<script>
-  // 1. 預設日期為今天（含今年，不用自己打年份）
-  function setDefaultDateIfEmpty() {
-    const el = document.getElementById("date");
-    if (!el.value) {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      el.value = `${y}-${m}-${day}`;
-    }
-  }
-
-  // 2. 產生派車內容文字，方便貼到 LINE
-  function buildSummary() {
-    const company = document.getElementById("company").value.trim();
-    const passenger = document.getElementById("passenger").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const date = document.getElementById("date").value;
-    const start = document.getElementById("start").value.trim();
-    const end = document.getElementById("end").value.trim();
-    const timeStart = document.getElementById("time-start").value;
-    const timeEnd = document.getElementById("time-end").value;
-    const hours = document.getElementById("hours").value.trim();
-    const minutes = document.getElementById("minutes").value.trim();
-    const board = (document.querySelector("input[name='board']:checked") || {}).value || "";
-    const carType = (document.querySelector("input[name='car-type']:checked") || {}).value || "";
-    const carTypeOther = document.getElementById("car-type-other").value.trim();
-    const people = document.getElementById("people").value.trim();
-    const driver = document.getElementById("driver").value.trim();
-    const carNo = document.getElementById("car-no").value.trim();
-    const note = document.getElementById("note").value.trim();
-    const type = (document.querySelector("input[name='type']:checked") || {}).value || "";
-
-    let carTypeText = carType;
-    if (carType === "其他" && carTypeOther) {
-      carTypeText += `（${carTypeOther}）`;
+  <script>
+    // ---------- 工具：日期預設今天 ----------
+    function setDefaultDateIfEmpty() {
+      const el = document.getElementById("date");
+      if (!el.value) {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        el.value = `${y}-${m}-${day}`;
+      }
     }
 
-    let charterText = "";
-    if (hours || minutes) {
-      charterText = `${hours || "0"} 小時 ${minutes || "0"} 分`;
+    // ---------- 組成文字摘要：給 LINE 用 ----------
+    function buildSummary() {
+      const company = document.getElementById("company").value.trim();
+      const passenger = document.getElementById("passenger").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const date = document.getElementById("date").value;
+      const start = document.getElementById("start").value.trim();
+      const end = document.getElementById("end").value.trim();
+      const timeStart = document.getElementById("time-start").value;
+      const hours = document.getElementById("hours").value.trim();
+      const minutes = document.getElementById("minutes").value.trim();
+      const board =
+        (document.querySelector("input[name='board']:checked") || {}).value ||
+        "";
+      const carType =
+        (document.querySelector("input[name='car-type']:checked") || {})
+          .value || "";
+      const carTypeOther =
+        document.getElementById("car-type-other").value.trim();
+      const people = document.getElementById("people").value.trim();
+      const driver = document.getElementById("driver").value.trim();
+      const carNo = document.getElementById("car-no").value.trim();
+      const note = document.getElementById("note").value.trim();
+      const type =
+        (document.querySelector("input[name='type']:checked") || {}).value ||
+        "";
+
+      let carTypeText = carType;
+      if (carType === "其他" && carTypeOther) {
+        carTypeText += `（${carTypeOther}）`;
+      }
+
+      let charterText = "";
+      if (hours || minutes) {
+        charterText = `${hours || "0"} 小時 ${minutes || "0"} 分`;
+      }
+
+      // yyyy-mm-dd -> 月日
+      let dateText = "";
+      if (date) {
+        const d = new Date(date);
+        const m = d.getMonth() + 1;
+        const day = d.getDate();
+        dateText = `${m} 月 ${day} 日`;
+      }
+
+      let lines = [];
+      if (company) lines.push(`公司：${company}`);
+      if (dateText || type) lines.push(`日期：${dateText}　類型：${type}`);
+      if (passenger || phone) lines.push(`乘客：${passenger}　電話：${phone}`);
+      if (start) lines.push(`起點：${start}`);
+      if (end) lines.push(`終點：${end}`);
+      if (timeStart) lines.push(`開始 / 班機時間：${timeStart}`);
+      if (charterText) lines.push(`包車共計：${charterText}`);
+      if (board) lines.push(`舉牌接機：${board}`);
+      if (carTypeText || people)
+        lines.push(`車型：${carTypeText}　人數：${people || ""}`);
+      if (driver || carNo) lines.push(`駕駛：${driver}　車號：${carNo}`);
+      if (note) lines.push(`備註：${note}`);
+
+      return lines.join("\n");
     }
 
-    // 把 yyyy-mm-dd 拆成年月日（只顯示月日）
-    let dateText = "";
-    if (date) {
-      const d = new Date(date);
-      const m = d.getMonth() + 1;
-      const day = d.getDate();
-      dateText = `${m} 月 ${day} 日`;
+    function clearForm() {
+      document.querySelectorAll("input, textarea").forEach((el) => {
+        if (el.type === "radio") return;
+        if (el.id === "company") return;
+        el.value = "";
+      });
+      // 單選選回預設
+      const typeDefault = document.querySelector(
+        "input[name='type'][value='送機']"
+      );
+      if (typeDefault) typeDefault.checked = true;
+      const boardDefault = document.querySelector(
+        "input[name='board'][value='否']"
+      );
+      if (boardDefault) boardDefault.checked = true;
+      const carTypeDefault = document.querySelector(
+        "input[name='car-type'][value='轎車']"
+      );
+      if (carTypeDefault) carTypeDefault.checked = true;
+      setDefaultDateIfEmpty();
     }
 
-    let lines = [];
-    if (company) lines.push(`公司：${company}`);
-    if (dateText || type) lines.push(`日期：${dateText}　派車類型：${type}`);
-    if (passenger || phone) lines.push(`乘客：${passenger}　電話：${phone}`);
-    if (start) lines.push(`起點：${start}`);
-    if (end)   lines.push(`終點：${end}`);
-    if (timeStart) lines.push(`開始 / 班機時間：${timeStart}`);
-    if (timeEnd)   lines.push(`結束時間：${timeEnd}`);
-    if (charterText) lines.push(`包車共計：${charterText}`);
-    if (board) lines.push(`舉牌接機：${board}`);
-    if (carTypeText || people) lines.push(`車型：${carTypeText}　人數：${people || ""}`);
-    if (driver || carNo) lines.push(`駕駛：${driver}　車號：${carNo}`);
-    if (note) lines.push(`備註：${note}`);
+    function handleDesktopMask() {
+      const mask = document.getElementById("desktop-mask");
+      if (!mask) return;
+      const isDesktop = window.innerWidth > 900;
+      mask.style.display = isDesktop ? "flex" : "none";
+    }
 
-    return lines.join("\n");
-  }
+    // ---------- 產生 A5 簽單圖檔（Canvas） ----------
+    const TEMPLATE_SRC = "dispatch-template.jpg"; // 請確認 repo 有這張圖
+    const templateImg = new Image();
+    templateImg.src = TEMPLATE_SRC;
 
-  // 3. 清除表單
-  function clearForm() {
-    document.querySelectorAll("input, textarea").forEach(el => {
-      if (el.type === "radio") return;
-      if (el.id === "company") return; // 公司抬頭常用就保留
-      el.value = "";
+    // 這裡用的是妳之前給我的 layout，直接拿來算座標
+    const FIELD_LAYOUT = {
+      "f-company": {
+        leftPct: 0.12046944078547313,
+        topPct: 0.15147116209349912,
+        widthPct: 0.24246966003826648,
+        heightPct: 0.06291191266671499,
+        fontSize: 32,
+      },
+      "f-date-month": {
+        leftPct: 0.7239009525506123,
+        topPct: 0.15401803092125885,
+        widthPct: 0.04490297207438836,
+        heightPct: 0.04718393150016247,
+        fontSize: 28,
+      },
+      "f-date-day": {
+        leftPct: 0.8208824239766633,
+        topPct: 0.1558946559528775,
+        widthPct: 0.04152249225335346,
+        heightPct: 0.04718393150016247,
+        fontSize: 28,
+      },
+      "f-passenger": {
+        leftPct: 0.11024825240107503,
+        topPct: 0.2576349907195905,
+        widthPct: 0.19531835334300557,
+        heightPct: 0.04874779569275725,
+        fontSize: 28,
+      },
+      "f-phone": {
+        leftPct: 0.3978122339632854,
+        topPct: 0.26094145158371734,
+        widthPct: 0.2222505614070548,
+        heightPct: 0.04718393150016247,
+        fontSize: 24,
+      },
+      "f-type-send": {
+        leftPct: 0.628581852735533,
+        topPct: 0.24055275894599263,
+        widthPct: 0.02356045508957414,
+        heightPct: 0.07707590175005435,
+        fontSize: 40,
+      },
+      "f-type-pick": {
+        leftPct: 0.7408977581596651,
+        topPct: 0.23891335452604154,
+        widthPct: 0.032455089574968044,
+        heightPct: 0.07233975994290161,
+        fontSize: 40,
+      },
+      "f-type-charter": {
+        leftPct: 0.8558991505667171,
+        topPct: 0.24063360213802204,
+        widthPct: 0.031428890152637626,
+        heightPct: 0.07077590175005435,
+        fontSize: 40,
+      },
+      "f-start": {
+        leftPct: 0.2048781556220424,
+        topPct: 0.36292756000827486,
+        widthPct: 0.4108557881880983,
+        heightPct: 0.04874779569275725,
+        fontSize: 24,
+      },
+      "f-end": {
+        leftPct: 0.20485384574538243,
+        topPct: 0.4610263480112757,
+        widthPct: 0.41310412280897085,
+        heightPct: 0.04718393150016247,
+        fontSize: 24,
+      },
+      "f-time-start-h": {
+        leftPct: 0.6895699390717043,
+        topPct: 0.38368223465156587,
+        widthPct: 0.05274823527195054,
+        heightPct: 0.04718393150016247,
+        fontSize: 24,
+      },
+      "f-time-start-m": {
+        leftPct: 0.8111077233509364,
+        topPct: 0.3868322940970644,
+        widthPct: 0.04490297207438836,
+        heightPct: 0.04559773024751119,
+        fontSize: 24,
+      },
+      "f-hours": {
+        leftPct: 0.6681070775829435,
+        topPct: 0.5857778054699458,
+        widthPct: 0.047135363762652,
+        heightPct: 0.044033869054790176,
+        fontSize: 24,
+      },
+      "f-minutes": {
+        leftPct: 0.7897564752372812,
+        topPct: 0.5827841279438961,
+        widthPct: 0.051632037286678166,
+        heightPct: 0.04718393150016247,
+        fontSize: 24,
+      },
+      "f-board-sign": {
+        leftPct: 0.4737933302615103,
+        topPct: 0.5618060437016811,
+        widthPct: 0.038142012432318545,
+        heightPct: 0.07233975994290161,
+        fontSize: 40,
+      },
+      "f-car-type-sedan": {
+        leftPct: 0.12219156870234892,
+        topPct: 0.6256786134439463,
+        widthPct: 0.033677226914650714,
+        heightPct: 0.0676258363048083,
+        fontSize: 40,
+      },
+      "f-car-type-van": {
+        leftPct: 0.22247378815726593,
+        topPct: 0.6298786947045268,
+        widthPct: 0.03479342489992309,
+        heightPct: 0.06447577085956223,
+        fontSize: 40,
+      },
+      "f-car-type-other-v": {
+        leftPct: 0.12214370992855442,
+        topPct: 0.6992918018009802,
+        widthPct: 0.031428890152637626,
+        heightPct: 0.07077590175005435,
+        fontSize: 40,
+      },
+      "f-car-type-other-text": {
+        leftPct: 0.21290641845423355,
+        topPct: 0.7172091838375441,
+        widthPct: 0.13470890765860286,
+        heightPct: 0.04874779569275725,
+        fontSize: 28,
+      },
+      "f-people": {
+        leftPct: 0.4464874847991338,
+        topPct: 0.68182236993139,
+        widthPct: 0.11524024985399195,
+        heightPct: 0.05504792358337561,
+        fontSize: 28,
+      },
+      "f-driver": {
+        leftPct: 0.11434629265794337,
+        topPct: 0.8020374902624098,
+        widthPct: 0.1840926103244085,
+        heightPct: 0.053461716330976794,
+        fontSize: 28,
+      },
+      "f-car-no": {
+        leftPct: 0.4023726920645905,
+        topPct: 0.8050088292284661,
+        widthPct: 0.15716040226035927,
+        heightPct: 0.04718393150016247,
+        fontSize: 24,
+      },
+      "f-footer-tel": {
+        leftPct: 0.11007285016640944,
+        topPct: 0.9012086611395392,
+        widthPct: 0.20541194687915917,
+        heightPct: 0.04718393150016247,
+        fontSize: 24,
+      },
+      "f-footer-fax": {
+        leftPct: 0.3910831601864334,
+        topPct: 0.8994884135275587,
+        widthPct: 0.19083763131615053,
+        heightPct: 0.044033869054790176,
+        fontSize: 24,
+      },
+      "f-footer-mobile": {
+        leftPct: 0.6599582818457524,
+        topPct: 0.8994884135275587,
+        widthPct: 0.250141895195355,
+        heightPct: 0.044033869054790176,
+        fontSize: 24,
+      },
+    };
+
+    function collectCanvasValues() {
+      const data = {};
+      const company = document.getElementById("company").value.trim();
+      const passenger = document.getElementById("passenger").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const date = document.getElementById("date").value;
+      const start = document.getElementById("start").value.trim();
+      const end = document.getElementById("end").value.trim();
+      const timeStart = document.getElementById("time-start").value;
+      const hours = document.getElementById("hours").value.trim();
+      const minutes = document.getElementById("minutes").value.trim();
+      const board =
+        (document.querySelector("input[name='board']:checked") || {}).value ||
+        "";
+      const carType =
+        (document.querySelector("input[name='car-type']:checked") || {})
+          .value || "";
+      const carTypeOther =
+        document.getElementById("car-type-other").value.trim();
+      const people = document.getElementById("people").value.trim();
+      const driver = document.getElementById("driver").value.trim();
+      const carNo = document.getElementById("car-no").value.trim();
+
+      // 日期拆成月、日
+      if (date) {
+        const d = new Date(date);
+        data["f-date-month"] = String(d.getMonth() + 1);
+        data["f-date-day"] = String(d.getDate());
+      }
+
+      data["f-company"] = company;
+      data["f-passenger"] = passenger;
+      data["f-phone"] = phone;
+      data["f-start"] = start;
+      data["f-end"] = end;
+
+      if (timeStart) {
+        const [hh, mm] = timeStart.split(":");
+        data["f-time-start-h"] = hh;
+        data["f-time-start-m"] = mm;
+      }
+
+      data["f-hours"] = hours;
+      data["f-minutes"] = minutes;
+
+      // 舉牌接機：打勾 V
+      if (board === "是") data["f-board-sign"] = "V";
+
+      // 車型的勾選
+      if (carType === "轎車") data["f-car-type-sedan"] = "V";
+      if (carType === "休旅車") data["f-car-type-van"] = "V";
+      if (carType === "其他") {
+        data["f-car-type-other-v"] = "V";
+        data["f-car-type-other-text"] = carTypeOther;
+      }
+
+      data["f-people"] = people;
+      data["f-driver"] = driver;
+      data["f-car-no"] = carNo;
+
+      // 底部三欄可以先寫死，之後妳要再改程式碼也行
+      data["f-footer-tel"] = "電話：(03)XXXXXXX";
+      data["f-footer-fax"] = "傳真：(03)XXXXXXX";
+      data["f-footer-mobile"] = "手機：0931-XXXXXX 0932-XXXXXX";
+
+      return data;
+    }
+
+    async function generateImage() {
+      const preview = document.getElementById("img-preview");
+      preview.innerHTML = "簽單圖檔產生中，請稍候…";
+
+      if (!templateImg.complete) {
+        await new Promise((resolve) => {
+          templateImg.onload = resolve;
+        });
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = templateImg.naturalWidth || 1400;
+      canvas.height = templateImg.naturalHeight || 960;
+
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.drawImage(templateImg, 0, 0, canvas.width, canvas.height);
+
+      const W = canvas.width;
+      const H = canvas.height;
+
+      ctx.fillStyle = "#000";
+      ctx.textBaseline = "top";
+
+      const values = collectCanvasValues();
+
+      Object.entries(FIELD_LAYOUT).forEach(([id, cfg]) => {
+        const text = values[id];
+        if (!text) return;
+        ctx.font = `${cfg.fontSize}px "Microsoft JhengHei","PingFang TC",sans-serif`;
+        const x = cfg.leftPct * W;
+        const y = cfg.topPct * H;
+        ctx.fillText(text, x, y);
+      });
+
+      const dataUrl = canvas.toDataURL("image/png");
+      preview.innerHTML = "";
+
+      const img = document.createElement("img");
+      img.src = dataUrl;
+      img.alt = "簽單預覽圖（長按可儲存）";
+      preview.appendChild(img);
+
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "dispatch.png";
+      a.textContent = "下載簽單圖檔（PNG）";
+      preview.appendChild(a);
+
+      const tip = document.createElement("div");
+      tip.textContent = "在手機上可長按圖片 → 儲存到相簿，再給客人簽名用。";
+      tip.style.marginTop = "4px";
+      preview.appendChild(tip);
+    }
+
+    // ---------- 綁定事件 ----------
+    window.addEventListener("load", () => {
+      setDefaultDateIfEmpty();
+      handleDesktopMask();
     });
-    // 單選選回預設
-    const typeDefault = document.querySelector("input[name='type'][value='送機']");
-    if (typeDefault) typeDefault.checked = true;
-    const boardDefault = document.querySelector("input[name='board'][value='否']");
-    if (boardDefault) boardDefault.checked = true;
-    const carTypeDefault = document.querySelector("input[name='car-type'][value='轎車']");
-    if (carTypeDefault) carTypeDefault.checked = true;
-    setDefaultDateIfEmpty();
-  }
 
-  // 4. Desktop 遮罩：螢幕太寬就跳提醒
-  function handleDesktopMask() {
-    const mask = document.getElementById("desktop-mask");
-    if (!mask) return;
-    const isDesktop = window.innerWidth > 900;
-    if (isDesktop) {
-      mask.style.display = "flex";
-    } else {
-      mask.style.display = "none";
-    }
-  }
+    window.addEventListener("resize", handleDesktopMask);
 
-  window.addEventListener("load", () => {
-    setDefaultDateIfEmpty();
-    handleDesktopMask();
-  });
+    document
+      .getElementById("btn-today")
+      .addEventListener("click", setDefaultDateIfEmpty);
 
-  window.addEventListener("resize", handleDesktopMask);
+    document.getElementById("btn-clear").addEventListener("click", () => {
+      clearForm();
+      const result = document.getElementById("copy-result");
+      result.style.display = "none";
+      result.textContent = "";
+      document.getElementById("img-preview").innerHTML = "";
+    });
 
-  document.getElementById("btn-today").addEventListener("click", () => {
-    setDefaultDateIfEmpty();
-  });
+    document.getElementById("btn-copy").addEventListener("click", async () => {
+      const text = buildSummary();
+      const result = document.getElementById("copy-result");
+      if (!text) {
+        result.style.display = "block";
+        result.textContent = "目前沒有內容可以複製，請先填寫表單。";
+        return;
+      }
 
-  document.getElementById("btn-clear").addEventListener("click", () => {
-    clearForm();
-    const result = document.getElementById("copy-result");
-    result.style.display = "none";
-    result.textContent = "";
-  });
+      try {
+        await navigator.clipboard.writeText(text);
+        result.style.display = "block";
+        result.textContent =
+          "已複製派車內容，可直接貼到 LINE 或其他聊天視窗：\n\n" +
+          text;
+      } catch (e) {
+        result.style.display = "block";
+        result.textContent =
+          "複製失敗，但以下是產生的派車內容，你可以自行長按全選複製：\n\n" +
+          text;
+      }
+    });
 
-  document.getElementById("btn-copy").addEventListener("click", async () => {
-    const text = buildSummary();
-    const result = document.getElementById("copy-result");
-    if (!text) {
-      result.style.display = "block";
-      result.textContent = "目前沒有內容可以複製，請先填寫表單。";
-      return;
-    }
+    document
+      .getElementById("btn-generate-img")
+      .addEventListener("click", generateImage);
 
-    try {
-      await navigator.clipboard.writeText(text);
-      result.style.display = "block";
-      result.textContent = "已複製派車內容，可直接貼到 LINE 或其他聊天視窗：\n\n" + text;
-    } catch (e) {
-      result.style.display = "block";
-      result.textContent = "複製失敗，但以下是產生的派車內容，你可以自行長按全選複製：\n\n" + text;
-    }
-  });
-
-  // 桌機遮罩按鈕：我知道了，仍要使用
-  document.getElementById("btn-desktop-continue").addEventListener("click", () => {
-    const mask = document.getElementById("desktop-mask");
-    if (mask) mask.style.display = "none";
-  });
-</script>
+    document
+      .getElementById("btn-desktop-continue")
+      .addEventListener("click", () => {
+        const mask = document.getElementById("desktop-mask");
+        if (mask) mask.style.display = "none";
+      });
+  </script>
 </body>
 </html>
